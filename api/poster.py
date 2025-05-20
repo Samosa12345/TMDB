@@ -9,7 +9,7 @@ import re
 
 app = FastAPI()
 
-TMDB_API_KEY = ""
+TMDB_API_KEY = "de19ae80ab28129b35fc510770e30b48"
 UPLOAD_API = "https://api.envs.sh/upload"
 
 # ---- Utility: Upload image to envs.sh ----
