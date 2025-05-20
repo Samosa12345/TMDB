@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Poster Fetcher</title>
+</head>
+<body>
+  <h1>Fetch Poster</h1>
+  <form id="posterForm">
+    <input type="text" id="title" placeholder="Enter movie/series title" required />
+    <select id="lang">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+    </select>
+    <button type="submit">Get Poster</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("posterForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const lang = document.getElementById("lang").value;
+
+      const res = await fetch(`/api/poster?title=${encodeURIComponent(title)}&lang=${lang}`);
+      const data = await res.json();
+
+      const resultDiv = document.getElementById("result");
+      if (data.url) {
+        resultDiv.innerHTML = `
+          <img src="${data.url}" style="max-width: 100%;"><br>
+          <a href="${data.url}" download><button>Download Poster</button></a>
+        `;
+      } else {
+        resultDiv.innerText = "Poster not found.";
+      }
+    });
+  </script>
+</body>
+</html>
