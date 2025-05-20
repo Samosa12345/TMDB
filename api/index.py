@@ -12,6 +12,11 @@ app = FastAPI()
 TMDB_API_KEY = "de19ae80ab28129b35fc510770e30b48"
 UPLOAD_API = "https://api.envs.sh/upload"
 
+@app.get("/")
+async def read_root():
+    return JSONResponse({"message": "FastAPI working on Vercel!"})
+
+
 # ---- Utility: Upload image to envs.sh ----
 async def upload_to_envs(image_url: str):
     async with httpx.AsyncClient() as client:
