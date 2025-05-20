@@ -1,11 +1,10 @@
 {
-  "version": 2,
   "builds": [
     { "src": "api/poster.py", "use": "@vercel/python" },
     { "src": "package.json", "use": "@vercel/static-build" }
   ],
   "routes": [
-    { "src": "/api/poster", "dest": "/api/poster.py" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/api/poster", "dest": "api/poster.py" },
+    { "src": "/(.*)", "dest": "/" }
   ]
 }
