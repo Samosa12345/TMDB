@@ -9,13 +9,12 @@ import re
 
 app = FastAPI()
 
-TMDB_API_KEY = "de19ae80ab28129b35fc510770e30b48"
+TMDB_API_KEY = "6abcb6bb99fb77f33c37016a28866ed2"
 UPLOAD_API = "https://api.envs.sh/upload"
 
 @app.get("/")
 async def read_root():
     return JSONResponse({"message": "FastAPI working on Vercel!"})
-
 
 # ---- Utility: Upload image to envs.sh ----
 async def upload_to_envs(image_url: str):
@@ -28,20 +27,7 @@ async def upload_to_envs(image_url: str):
                 return response.json().get("url")
     return None
 
-# ---- TMDB Poster Fetch ----
-async def fetch_tmdb_poster(title: str, lang: str):
-    async with httpx.AsyncClient() as client:
-        search_url = f"https://api.themoviedb.org/3/search/multi?api_key={TMDB_API_KEY}&query={title}&language={lang}"
-        res = await client.get(search_url)
-        data = res.json()
-        if data.get("results"):
-            poster_path = data["results"][0].get("backdrop_path") or data["results"][0].get("poster_path")
-            if poster_path:
-                full_url = f"https://image.tmdb.org/t/p/original{poster_path}"
-                return await upload_to_envs(full_url)
-    return None
-
-# ---- OTT Scrapers ----
+# ---- Ullu Poster Scraper ----
 async def scrape_ullu(title: str):
     search_url = f"https://ullu.app/search/{title.replace(' ', '%20')}"
     async with httpx.AsyncClient() as client:
@@ -52,6 +38,7 @@ async def scrape_ullu(title: str):
             return await upload_to_envs(poster["src"])
     return None
 
+# ---- BookMyShow Poster Scraper ----
 async def scrape_bookmyshow(title: str):
     url = f"https://in.bookmyshow.com/explore/movies"
     async with httpx.AsyncClient() as client:
@@ -61,6 +48,7 @@ async def scrape_bookmyshow(title: str):
         if img_tag:
             return await upload_to_envs(img_tag["src"])
     return None
+
 
 # Extend with Chaupal, Atrangi, Ultra Jhakaas similarly...
 
